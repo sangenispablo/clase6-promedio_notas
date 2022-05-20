@@ -6,4 +6,4 @@ Proyecto de ejemplo para la clase 8 (DOM)
 
 Se usa funciones, ciclos de repitición, import, export, array, objetos y ahora con DOM.
 
-Nota: Usar liveserver
+Nota: Usar liveserver para ejecutar el ejemplo
