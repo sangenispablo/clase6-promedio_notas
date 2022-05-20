@@ -5,27 +5,37 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
-    <title>Promedio de Notas</title>
-    <style>
-      h2,
-      h3,
-      p {
-        text-align: center;
-      }
-      div.center {
-        text-align: center;
-      }
-    </style>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+      crossorigin="anonymous"
+    />
+    <title>Notas - DOM</title>
   </head>
 
   <body>
-    <h2>Promedios de Notas</h2>
-    <p>Por favor abrir la consola para ver el resultado</p>
-    <div class="center">
-      <button id="boton">Resolver</button>
+    <div class="container">
+      <h2 class="display-6 fw-bold text-center">Promedios de Notas</h2>
+      <p class="text-center">Data generada al azar y tabla generada desde JS</p>
+      <div class="tabla_random mt-4">
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Alumnos</th>
+              <th scope="col">Nota 1</th>
+              <th scope="col">Nota 2</th>
+              <th scope="col">Nota 3</th>
+              <th scope="col">Promedio</th>
+              <th scope="col">Estado</th>
+            </tr>
+          </thead>
+          <tbody id="tablabody"></tbody>
+        </table>
+      </div>
     </div>
 
     <script type="module" src="./js/app.js"></script>
   </body>
-  
 </html>
