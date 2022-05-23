@@ -1,49 +1,25 @@
 import { genFirstLastName, genNota, Alumno } from "./utils.js";
 
-// capturo el id del body de la tabla
+// acceso al DOM
 const tablaBody = document.querySelector("#tablabody");
+const btnGenerar = document.querySelector("#btnGenerar");
+const inputCantidad = document.querySelector("#inputCantidad");
 
 // Array para cargar los datos con un objeto de la clase Alumno
-const alumnos = [];
+let alumnos = [];
 
-function inputN(cantidad) {
-  let n;
-  // bandera para validar
-  let seguir = true;
-  if (!cantidad) {
-    seguir = true;
-  } else {
-    seguir = false;
-    n = cantidad;
-  }
-  while (seguir) {
-    n = parseInt(
-      prompt("Cantidad de alumnos a generar para la simulación", 10)
-    );
-    if (isNaN(n) || n <= 0) {
-      alert("Error: Valores invalidos");
-      seguir = true;
-    } else {
-      seguir = false;
-    }
-  }
-  return n;
-}
-
-// cambie un poco la funcion de la version anterior
-// ahora si le paso un parametro no pide la cantidad
+// ejecuto la funcion para generar la tabla
 function start(cantidad) {
-
+  // borro los alumnos y los vuelvo a generar
+  alumnos = [];
   // n = cantidad de alumnos a generar
-  let n = inputN(cantidad);
-  
+  let n = cantidad;
   // ciclo para generar los objetos del array
   for (let i = 0; i < n; i++) {
     alumnos.push(
       new Alumno(genFirstLastName(), genNota(), genNota(), genNota())
     );
   }
-
   createHtml();
 }
 
@@ -53,29 +29,86 @@ function limpiarHijos(element) {
   }
 }
 
+function eliminarFila(e) {
+  const id = parseInt(e.target.parentElement.parentElement.dataset.id);
+  const fila = e.target.parentElement.parentElement;
+  // borro del array el elemento
+  alumnos.splice(id, 1);
+  // elimino de la tabla el elemento seleccionado
+  fila.remove();
+  // vuelvo a crear el element Table
+  createHtml();
+}
+
 function crearFila(elemento, index) {
-  return `
-    <tr class="${!elemento.isAprobado() ? "table-danger" : "table-success"}">
-      <th scope="row">${index}</th>
-      <td>${elemento.nombre}</td>
-      <td>${elemento.n1}</td>
-      <td>${elemento.n2}</td>
-      <td>${elemento.n3}</td>
-      <td>${elemento.promedio().toFixed(2)}</td>
-      <td>${elemento.isAprobado() ? "Aprobado" : "Desaprobado"}</td>
-    </tr>
-  `;
+  const tr = document.createElement("tr");
+  const th = document.createElement("th");
+  const btnBorrar = document.createElement("button");
+  btnBorrar.innerText = "Borrar";
+  btnBorrar.classList.add("btn", "btn-danger");
+  btnBorrar.onclick = eliminarFila;
+  let td;
+  tr.classList.add(
+    `${!elemento.isAprobado() ? "table-danger" : "table-success"}`
+  );
+  tr.setAttribute("data-id", index);
+  tr.setAttribute("id", index);
+  th.setAttribute("scope", "row");
+  th.innerText = `${index + 1}`;
+  tr.appendChild(th);
+  td = document.createElement("td");
+  td.innerText = `${elemento.nombre}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.innerText = `${elemento.n1}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.innerText = `${elemento.n2}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.innerText = `${elemento.n3}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.innerText = `${elemento.promedio().toFixed(2)}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.innerText = `${elemento.isAprobado() ? "Aprobado" : "Desaprobado"}`;
+  tr.appendChild(td);
+  td = document.createElement("td");
+  td.appendChild(btnBorrar);
+  tr.appendChild(td);
+  return tr;
 }
 
 function createHtml() {
   // limpio el tablaBody
   limpiarHijos(tablaBody);
-
   // recorro ahora el array con foreach
   alumnos.forEach((alumno, index) => {
-    const fila = crearFila(alumno, index + 1);
-    tablaBody.innerHTML += fila;
+    const fila = crearFila(alumno, index);
+    tablaBody.appendChild(fila);
   });
 }
 
-start();
+// agrego un evento para ejecutar star en el boton ///////////////////////////
+btnGenerar.addEventListener("click", () => {
+  // saco la cantidad de elementos del input
+  const cantidad = parseInt(inputCantidad.value);
+  start(cantidad);
+});
+
+inputCantidad.addEventListener("input", (e) => {
+  const cantidad = parseInt(e.target.value);
+  if (cantidad > 0) {
+    btnGenerar.disabled = false;
+  } else {
+    btnGenerar.disabled = true;
+  }
+});
+
+inputCantidad.addEventListener("change", (e) => {
+  const cantidad = parseInt(e.target.value);
+  if (cantidad > 0) {
+    start(cantidad);
+  }
+});

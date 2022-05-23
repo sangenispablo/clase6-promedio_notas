@@ -4,19 +4,57 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-      crossorigin="anonymous"
-    />
-    <title>Notas - DOM</title>
+    <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap 5.1.3 -->
+    <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css" />
+    <title>Notas - DOM - Events</title>
   </head>
 
   <body>
     <div class="container">
-      <h2 class="display-6 fw-bold text-center">Promedios de Notas</h2>
+      <header class="p-3 bg-dark text-white">
+        <div class="container">
+          <div
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start"
+          >
+            <a
+              href="/"
+              class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none"
+            >
+              <img src="./img/favicon.png" alt="logo" />
+            </a>
+
+            <ul
+              class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
+            >
+              <li>
+                <a href="/" class="nav-link px-2 text-secondary">Promedio de Notas</a>
+              </li>
+
+            </ul>
+
+            <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
+              <input
+              id="inputCantidad"
+                type="number"
+                class="form-control form-control-dark"
+                placeholder="Cant. de alumnos..."
+                name="cantidad"
+              />
+              
+            </div>
+
+            <div class="text-end">
+              <button id="btnGenerar" type="button" class="btn btn-outline-light me-2" disabled>
+                Generar
+              </button>
+            </div>
+
+          </div>
+        </div>
+
+      </header>
+
       <p class="text-center">Data generada al azar y tabla generada desde JS</p>
       <div class="tabla_random mt-4">
         <table class="table">
@@ -29,6 +67,7 @@
               <th scope="col">Nota 3</th>
               <th scope="col">Promedio</th>
               <th scope="col">Estado</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody id="tablabody"></tbody>
@@ -36,6 +75,7 @@
       </div>
     </div>
 
+    <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
