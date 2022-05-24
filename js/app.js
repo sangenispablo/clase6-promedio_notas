@@ -35,9 +35,12 @@ function eliminarFila(e) {
   // borro del array el elemento
   alumnos.splice(id, 1);
   // elimino de la tabla el elemento seleccionado
-  fila.remove();
+  if (fila.parentNode) {
+    fila.parentNode.removeChild(fila);
+  }
   // vuelvo a crear el element Table
   createHtml();
+  console.log(alumnos);
 }
 
 function crearFila(elemento, index) {
