@@ -1,21 +1,21 @@
+// Import de funciones y clases
 import { genFirstLastName, genNota, Alumno } from "./utils.js";
 
 // acceso al DOM
 const tablaBody = document.querySelector("#tablabody");
 const btnGenerar = document.querySelector("#btnGenerar");
+const btnBorrar = document.querySelector("#btnBorrar");
 const inputCantidad = document.querySelector("#inputCantidad");
 
 // Array para cargar los datos con un objeto de la clase Alumno
 let alumnos = [];
 
 // ejecuto la funcion para generar la tabla
-function start(cantidad) {
+function start(cantAlumnos) {
   // borro los alumnos y los vuelvo a generar
   alumnos = [];
-  // n = cantidad de alumnos a generar
-  let n = cantidad;
   // ciclo para generar los objetos del array
-  for (let i = 0; i < n; i++) {
+  for (let i = 0; i < cantAlumnos; i++) {
     alumnos.push(
       new Alumno(genFirstLastName(), genNota(), genNota(), genNota())
     );
@@ -23,10 +23,11 @@ function start(cantidad) {
   createHtml();
 }
 
-function limpiarHijos(element) {
+function borrarTabla(element) {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
+  btnBorrar.disabled = true;
 }
 
 function eliminarFila(e) {
@@ -35,19 +36,16 @@ function eliminarFila(e) {
   // borro del array el elemento
   alumnos.splice(id, 1);
   // elimino de la tabla el elemento seleccionado
-  if (fila.parentNode) {
-    fila.parentNode.removeChild(fila);
-  }
+  fila.parentNode ? fila.parentNode.removeChild(fila) : undefined;
   // vuelvo a crear el element Table
   createHtml();
-  console.log(alumnos);
 }
 
 function crearFila(elemento, index) {
   const tr = document.createElement("tr");
   const th = document.createElement("th");
   const btnBorrar = document.createElement("button");
-  btnBorrar.innerText = "Borrar";
+  btnBorrar.innerText = "Eliminar";
   btnBorrar.classList.add("btn", "btn-danger");
   btnBorrar.onclick = eliminarFila;
   let td;
@@ -81,37 +79,50 @@ function crearFila(elemento, index) {
   td.appendChild(btnBorrar);
   tr.appendChild(td);
   return tr;
+
+  // <tr class="table-success" data-id="0" id="0">
+  //   <th scope="row">1</th>
+  //   <td>Alvarez, Santino</td>
+  //   <td>10</td>
+  //   <td>5</td>
+  //   <td>5</td>
+  //   <td>6.67</td>
+  //   <td>Aprobado</td>
+  //   <td><button class="btn btn-danger">Borrar</button></td>
+  // </tr>
+
 }
 
 function createHtml() {
   // limpio el tablaBody
-  limpiarHijos(tablaBody);
-  // recorro ahora el array con foreach
-  alumnos.forEach((alumno, index) => {
-    const fila = crearFila(alumno, index);
-    tablaBody.appendChild(fila);
-  });
+  borrarTabla(tablaBody);
+  // recorro ahora el array con foreach si tiene elementos
+  btnBorrar.disabled = false;
+  alumnos.length > 0
+    ? alumnos.forEach((alumno, index) => {
+        tablaBody.appendChild(crearFila(alumno, index));
+      })
+    : (btnBorrar.disabled = true);
 }
 
 // agrego un evento para ejecutar star en el boton ///////////////////////////
 btnGenerar.addEventListener("click", () => {
   // saco la cantidad de elementos del input
-  const cantidad = parseInt(inputCantidad.value);
-  start(cantidad);
+  start(parseInt(inputCantidad.value));
+});
+
+btnBorrar.addEventListener("click", () => {
+  borrarTabla(tablaBody);
 });
 
 inputCantidad.addEventListener("input", (e) => {
-  const cantidad = parseInt(e.target.value);
-  if (cantidad > 0) {
-    btnGenerar.disabled = false;
-  } else {
-    btnGenerar.disabled = true;
-  }
+  parseInt(e.target.value) > 0
+    ? (btnGenerar.disabled = false)
+    : (btnGenerar.disabled = true);
 });
 
 inputCantidad.addEventListener("change", (e) => {
-  const cantidad = parseInt(e.target.value);
-  if (cantidad > 0) {
-    start(cantidad);
-  }
+  parseInt(e.target.value) > 0
+    ? (btnGenerar.disabled = false)
+    : (btnGenerar.disabled = true);
 });
