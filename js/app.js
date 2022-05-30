@@ -6,9 +6,39 @@ const tablaBody = document.querySelector("#tablabody");
 const btnGenerar = document.querySelector("#btnGenerar");
 const btnBorrar = document.querySelector("#btnBorrar");
 const inputCantidad = document.querySelector("#inputCantidad");
+const divChart = document.querySelector("#divChart");
 
 // Array para cargar los datos con un objeto de la clase Alumno
 let alumnos = [];
+
+function crearChart() {
+  // obtengo los aprobados y desaprobados y los meto en un array
+  const miData = [0, 0];
+  alumnos.forEach((alumno) => {
+    if (alumno.isAprobado()) {
+      miData[0]++;
+    } else {
+      miData[1]++;
+    }
+  });
+  console.log(miData);
+  // borro el chart
+  divChart.innerHTML = `<canvas id="myChart" width="400" height="400"></canvas>`;
+  const ctx = document.getElementById("myChart").getContext("2d");
+  let chart = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: ["Aprobados", "Desaprobados"],
+      datasets: [
+        {
+          label: "Grafica Estadisticas",
+          backgroundColor: "rgb(0,0,0)",
+          data: miData,
+        },
+      ],
+    },
+  });
+}
 
 // ejecuto la funcion para generar la tabla
 function start(cantAlumnos) {
@@ -21,9 +51,10 @@ function start(cantAlumnos) {
     );
   }
   createHtml();
+  crearChart();
 }
 
-function borrarTabla(element) {
+function borrarHtml(element) {
   while (element.firstChild) {
     element.removeChild(element.firstChild);
   }
@@ -90,12 +121,22 @@ function crearFila(elemento, index) {
   //   <td>Aprobado</td>
   //   <td><button class="btn btn-danger">Borrar</button></td>
   // </tr>
+}
 
+function viewToast(msg) {
+  Toastify({
+    text: msg,
+    duration: 1500,
+    close: true,
+    gravity: "top", // `top` or `bottom`
+    position: "right", // `left`, `center` or `right`
+    stopOnFocus: true, // Prevents dismissing of toast on hover
+  }).showToast();
 }
 
 function createHtml() {
   // limpio el tablaBody
-  borrarTabla(tablaBody);
+  borrarHtml(tablaBody);
   // recorro ahora el array con foreach si tiene elementos
   btnBorrar.disabled = false;
   alumnos.length > 0
@@ -103,6 +144,9 @@ function createHtml() {
         tablaBody.appendChild(crearFila(alumno, index));
       })
     : (btnBorrar.disabled = true);
+  alumnos.length > 0
+    ? viewToast(`Se generaron ${alumnos.length} registros`)
+    : viewToast(`Ups ningun registro generado`);
 }
 
 // agrego un evento para ejecutar star en el boton ///////////////////////////
@@ -112,7 +156,8 @@ btnGenerar.addEventListener("click", () => {
 });
 
 btnBorrar.addEventListener("click", () => {
-  borrarTabla(tablaBody);
+  borrarHtml(tablaBody);
+  divChart.innerHTML = `<canvas id="myChart" width="400" height="400"></canvas>`;
 });
 
 inputCantidad.addEventListener("input", (e) => {

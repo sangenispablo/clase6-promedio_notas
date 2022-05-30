@@ -7,6 +7,11 @@
     <link rel="shortcut icon" href="./img/favicon.ico" type="image/x-icon" />
     <!-- Bootstrap 5.1.3 -->
     <link rel="stylesheet" href="./assets/bootstrap/css/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
     <title>Notas - DOM - Events</title>
   </head>
 
@@ -28,35 +33,43 @@
               class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0"
             >
               <li>
-                <a href="/" class="nav-link px-2 text-secondary">Promedio de Notas</a>
+                <a href="/" class="nav-link px-2 text-secondary"
+                  >Promedio de Notas</a
+                >
               </li>
-
             </ul>
 
             <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
               <input
-              id="inputCantidad"
+                id="inputCantidad"
                 type="number"
                 class="form-control form-control-dark"
                 placeholder="Cant. de alumnos..."
                 name="cantidad"
                 min="1"
               />
-              
             </div>
 
             <div class="text-end">
-              <button id="btnGenerar" type="button" class="btn btn-outline-light me-2" disabled>
+              <button
+                id="btnGenerar"
+                type="button"
+                class="btn btn-outline-light me-2"
+                disabled
+              >
                 Generar
               </button>
-              <button id="btnBorrar" type="button" class="btn btn-outline-danger me-2" disabled>
+              <button
+                id="btnBorrar"
+                type="button"
+                class="btn btn-outline-danger me-2"
+                disabled
+              >
                 Borrar
               </button>
             </div>
-
           </div>
         </div>
-
       </header>
 
       <p class="text-center">Data generada al azar y tabla generada desde JS</p>
@@ -77,9 +90,16 @@
           <tbody id="tablabody"></tbody>
         </table>
       </div>
+
+      <div id="divChart"></div>
     </div>
 
     <script src="./assets/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.8.0/dist/chart.min.js"></script>
     <script type="module" src="./js/app.js"></script>
   </body>
 </html>
