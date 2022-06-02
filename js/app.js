@@ -40,39 +40,27 @@ function crearChart() {
   });
 }
 
+function crearAlumnos(cantAlumnos) {
+  let alumnos = [];
+  return new Promise((resolve, reject) => {
+    for (let i = 0; i < cantAlumnos; i++) {
+      alumnos.push(
+        new Alumno(genFirstLastName(), genNota(), genNota(), genNota())
+      );
+    }
+    resolve(alumnos);
+  });
+}
+
 // ejecuto la funcion para generar la tabla
-function start(cantAlumnos) {
-  // borro los alumnos y los vuelvo a generar
-  alumnos = [];
-  // ciclo para generar los objetos del array
-  for (let i = 0; i < cantAlumnos; i++) {
-    alumnos.push(
-      new Alumno(genFirstLastName(), genNota(), genNota(), genNota())
-    );
-  }
+const start = async function(cantAlumnos) {
+  // usando una promesa arriba declarada para crear el array
+  alumnos = await crearAlumnos(cantAlumnos); 
   createHtml();
   crearChart();
 }
 
-function borrarHtml(element) {
-  while (element.firstChild) {
-    element.removeChild(element.firstChild);
-  }
-  btnBorrar.disabled = true;
-}
-
-function eliminarFila(e) {
-  const id = parseInt(e.target.parentElement.parentElement.dataset.id);
-  const fila = e.target.parentElement.parentElement;
-  // borro del array el elemento
-  alumnos.splice(id, 1);
-  // elimino de la tabla el elemento seleccionado
-  fila.parentNode ? fila.parentNode.removeChild(fila) : undefined;
-  // vuelvo a crear el element Table
-  createHtml();
-}
-
-function crearFila(elemento, index) {
+function crearTR(elemento, index) {
   const tr = document.createElement("tr");
   const th = document.createElement("th");
   const btnBorrar = document.createElement("button");
@@ -123,6 +111,24 @@ function crearFila(elemento, index) {
   // </tr>
 }
 
+function borrarHtml(element) {
+  while (element.firstChild) {
+    element.removeChild(element.firstChild);
+  }
+  btnBorrar.disabled = true;
+}
+
+function eliminarFila(e) {
+  const id = parseInt(e.target.parentElement.parentElement.dataset.id);
+  const fila = e.target.parentElement.parentElement;
+  // borro del array el elemento
+  alumnos.splice(id, 1);
+  // elimino de la tabla el elemento seleccionado
+  fila.parentNode ? fila.parentNode.removeChild(fila) : undefined;
+  // vuelvo a crear el element Table
+  createHtml();
+}
+
 function viewToast(msg) {
   Toastify({
     text: msg,
@@ -141,7 +147,7 @@ function createHtml() {
   btnBorrar.disabled = false;
   alumnos.length > 0
     ? alumnos.forEach((alumno, index) => {
-        tablaBody.appendChild(crearFila(alumno, index));
+        tablaBody.appendChild(crearTR(alumno, index));
       })
     : (btnBorrar.disabled = true);
   alumnos.length > 0
